@@ -1,0 +1,32 @@
+name: Platform Gates Enforcement
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - dev
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  platform-gates:
+    name: Anti-drift + MCP hardening gates
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup deterministic Python runtime
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Show Python version
+        run: python --version
+
+      - name: Platform-only aggregated gates
+        run: python .agent/scripts/verify_all.py . --platform-only
