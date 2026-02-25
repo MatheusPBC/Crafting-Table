@@ -1,0 +1,54 @@
+{
+  "manifestVersion": "1.0.0",
+  "stackVersion": "1.0.0",
+  "stackName": "portable-cli-stack",
+  "description": "Portable CLI environment stack for private repository usage.",
+  "precedencePolicy": [
+    "base",
+    "overlay",
+    "local"
+  ],
+  "credentialsPolicy": {
+    "repositoryVisibility": "private",
+    "versionedCredentials": true,
+    "exportIncludesCredentialsByDefault": true
+  },
+  "components": [
+    {
+      "name": "agent_config",
+      "source": ".agent",
+      "target": ".agent",
+      "required": true
+    },
+    {
+      "name": "kilocode_config",
+      "source": ".kilocode",
+      "target": ".kilocode",
+      "required": true
+    },
+    {
+      "name": "mcp_servers",
+      "source": ".mcp_servers",
+      "target": ".mcp_servers",
+      "required": true
+    },
+    {
+      "name": "mcp_config_doc",
+      "source": "MCP_CONFIG.md",
+      "target": "MCP_CONFIG.md",
+      "required": true
+    },
+    {
+      "name": "root_agents_doc",
+      "source": "AGENTS.md",
+      "target": "AGENTS.md",
+      "required": false
+    },
+    {
+      "name": "root_gemini_doc",
+      "source": "GEMINI.md",
+      "target": "GEMINI.md",
+      "required": false
+    }
+  ]
+}

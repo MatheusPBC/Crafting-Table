@@ -126,7 +126,6 @@ Modular knowledge domains that agents can load on-demand. based on task context.
 | `plan-writing` | Task planning, breakdown |
 | `brainstorming` | Socratic questioning |
 
-
 ### Education & Mentoring
 
 | Skill | Description |
