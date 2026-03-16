@@ -15,6 +15,11 @@ O foco é padronizar:
 
 > Escopo intencional: este pacote não contém regras de domínio de produto; ele entrega somente a infraestrutura de plataforma.
 
+## Arquitetura de referencia (reaplicavel)
+
+Documento detalhado: `EXAMPLE_ARCHITETURE.md`.
+
+
 ## Componentes base adicionados
 
 ### `.agent/`
@@ -133,3 +138,15 @@ Este README descreve a branch com pacote de arquitetura contendo:
 - `MCP_CONFIG.md`
 
 Pronto para reutilização como fundação técnica em novos projetos.
+
+## Migração de Kilo CLI para OpenCode CLI
+
+Para projetos que utilizam Kilo CLI e desejam migrar para OpenCode CLI, consulte:
+
+- **`MIGRATION_GUIDE.md`** - Guia completo de migração incluindo:
+  - Configuração global (`~/.config/opencode/`)
+  - Skills, agentes e comandos customizados
+  - MCPs locais e remotos
+  - Custom tools (aifns)
+  - Migração de sessões
+  - Fixes e troubleshooting
