@@ -1,8 +1,22 @@
 # Guia de Configuração de Servidores MCP
 
-Este guia ajuda a configurar os servidores MCP (Model Context Protocol) para turbinar o nosso trabalho no Antigravity/Cursor.
+Este guia ajuda a configurar os servidores MCP (Model Context Protocol) do harness em OpenCode, Kilo Code e runtimes compatíveis.
+
+Credenciais reais devem ficar em variáveis de ambiente ou arquivos locais ignorados pelo Git. Não versionar tokens, senhas, chaves AWS ou JWTs.
 
 ## 1. Onde Configurar
+
+### OpenCode
+
+Use o `opencode.json` da raiz como ponto de partida. Ele referencia scripts em `.opencode/mcp_servers/` e usa placeholders no formato `{env:NOME_DA_VARIAVEL}`.
+
+Depois de alterar `opencode.json`, reinicie o OpenCode. A configuração não é recarregada a quente.
+
+### Kilo Code / outros runtimes
+
+Use `.kilocode/mcp.json` como configuração espelhada. Ele usa placeholders `${NOME_DA_VARIAVEL}` para evitar credenciais versionadas.
+
+### Cursor / clientes MCP genéricos
 
 1. Abra as configurações do Cursor ( atalho `Ctrl + ,` ou clique na engrenagem ⚙️).
 2. Vá em **Features** > **MCP Servers**.
@@ -28,9 +42,9 @@ Adicione os seguintes servidores.
 Você precisa de um Token do GitHub.
 
 1. Crie um token aqui: [GitHub Tokens](https://github.com/settings/tokens?type=beta) (Dê permissão de leitura em repositórios/issues).
-2. Adicione a variável:
+2. Adicione a variável no seu ambiente local, não no repositório:
    - Key: `GITHUB_PERSONAL_ACCESS_TOKEN`
-   - Value: `seu_token_que_começa_com_github_pat_xxxx`
+   - Value: `${GITHUB_PERSONAL_ACCESS_TOKEN}`
 
 ---
 
@@ -57,7 +71,7 @@ root
 dev
 ```
 
-*(Nota: Se o pacote `mcp-server-mysql` não funcionar direto, podemos usar um script Python customizado).*
+Alternativa recomendada neste harness: usar `.opencode/mcp_servers/mysql_mcp_server.py` com `MYSQL_*` via ambiente.
 
 ---
 
@@ -120,7 +134,7 @@ Se sua ferramenta aceitar editar o JSON direto (arquivo `config.json` ou similar
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-github"],
       "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "INSIRA_SEU_TOKEN_AQUI"
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
       }
     },
     "mysql": {

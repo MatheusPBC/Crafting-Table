@@ -9,6 +9,7 @@ Este repositório existe para servir como **fundação técnica reaproveitável*
 O foco é padronizar:
 
 - governança de agentes e skills;
+- configuração portável do OpenCode;
 - execução segura de servidores MCP;
 - validações de integridade (anti-drift) e hardening;
 - enforcement contínuo via CI.
@@ -36,6 +37,18 @@ Scripts principais:
 - `checklist.py`: execução incremental de checks (inclui modo `--platform-only`).
 - `verify_all.py`: suíte completa de verificação (inclui modo `--platform-only`).
 
+### `.opencode/`
+
+Harness portável do OpenCode.
+
+Inclui:
+
+- agentes, comandos, skills e tools do ambiente atual;
+- servidores MCP customizados em `.opencode/mcp_servers/`;
+- cópia de artefatos globais em `.opencode/global/` para bootstrap em outras máquinas.
+
+O arquivo `opencode.json` na raiz usa apenas placeholders de ambiente (`{env:...}`) e comandos reproduzíveis. Credenciais reais devem ficar fora do Git.
+
 ### `.kilocode/`
 
 Camada espelhada para compatibilidade operacional com runtimes que dependem dessa convenção.
@@ -48,13 +61,9 @@ Função prática:
 
 ### `.mcp_servers/`
 
-Implementações dos servidores MCP customizados do template:
+Compatibilidade legada para runtimes que ainda buscam servidores MCP fora de `.opencode/`.
 
-- `mysql_mcp_server.py`
-- `aws_mcp_server.py`
-- `docker_mcp_server.py`
-
-Esses servidores já estão preparados para validação por gates estáticos (hardening) executados pelos scripts em `.agent/scripts/`.
+Novas integrações devem preferir `.opencode/mcp_servers/`; mantenha este diretório sincronizado enquanto houver consumidores antigos.
 
 ### `.github/workflows/`
 
@@ -127,8 +136,10 @@ Para manter a base saudável ao longo do tempo:
 Este README descreve a branch com pacote de arquitetura contendo:
 
 - `.agent/`
+- `.opencode/`
 - `.kilocode/`
 - `.mcp_servers/`
+- `opencode.json`
 - `.github/workflows/platform-gates.yml`
 - `MCP_CONFIG.md`
 

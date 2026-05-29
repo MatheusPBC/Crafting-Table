@@ -29,7 +29,7 @@ You are the master orchestrator agent. You coordinate multiple specialized agent
 ## 🔧 RUNTIME CAPABILITY CHECK (FIRST STEP)
 
 **Before planning, you MUST verify available runtime tools:**
-- [ ] **Read `ARCHITECTURE.md`** to see full list of Scripts & Skills
+- [ ] **Read `/home/matheus/Documentos/vscode/baseDev/.agent/ARCHITECTURE.md`** to see full list of Scripts & Skills
 - [ ] **Identify relevant scripts** (e.g., `playwright_runner.py` for web, `security_scan.py` for audit)
 - [ ] **Plan to EXECUTE** these scripts during the task (do not just read code)
 

@@ -1,99 +1,46 @@
-# 🔄 HANDOFF — Agent Context Transfer Protocol
+# HANDOFF
 
-> **Purpose:** Maintain continuity between AI agents (CLI switches, rate limits, second opinions).
-> **Rule:** Every agent MUST read this file at session start. Update before closing.
-
----
-
-## 📌 Current State
+## Current State
 
 - **Active Task:** _None_
 - **Last Agent:** _None_
 - **Timestamp:** _Not set_
-- **Status:** `idle` <!-- idle | in-progress | blocked | review-needed -->
+- **Status:** `idle`
 
----
-
-## 🎯 Active Task Summary
-
-<!-- What is being worked on RIGHT NOW. Keep to 3-5 lines max. -->
+## Active Task Summary
 
 _No active task._
 
----
+## What Was Done
 
-## ✅ What Was Done (Last Session)
+_None_
 
-<!-- Bullet list of completed actions. Be specific: file names, functions, decisions. -->
+## What Needs To Be Done Next
 
-- _Nothing yet_
+_None_
 
----
+## Key Decisions
 
-## 🔜 What Needs To Be Done Next
+| Decision | Rationale | Affected Files |
+| --- | --- | --- |
+| _None_ | _None_ | _None_ |
 
-<!-- Clear, actionable next steps. Numbered for priority. -->
+## Blockers & Open Questions
 
-1. _Nothing pending_
+_None_
 
----
+## Modified Files
 
-## 🧠 Key Decisions Made
-
-<!-- Architecture choices, trade-offs, patterns selected. Critical for context. -->
-
-| Decision | Rationale | Files Affected |
-|----------|-----------|----------------|
-| _None_   | _N/A_     | _N/A_          |
-
----
-
-## ⚠️ Blockers & Open Questions
-
-<!-- Anything that stopped progress or needs user input. -->
-
-- _None_
-
----
-
-## 📁 Modified Files (Last Session)
-
-<!-- Quick reference for the next agent to know what changed. -->
-
-```
-(no files modified)
+```text
+_None_
 ```
 
----
+## Relevant Context
 
-## 🔗 Relevant Context
+_None_
 
-<!-- Links to task plans, PRs, issues, or documentation the next agent should read. -->
+## Usage Protocol
 
-- Task plan: _None_
-- Related PR: _None_
-- Docs: `.agent/ARCHITECTURE.md`
-
----
-
-## 📋 Usage Protocol
-
-### When Switching Agents (Rate Limit / Second Opinion)
-
-#### Before Closing Current Agent
-
-1. Ask: _"Update HANDOFF.md with current state before I close"_
-2. Agent fills: Active Task, What Was Done, Next Steps, Modified Files
-3. Agent sets Status to `in-progress` or `blocked`
-
-#### When Opening New Agent
-
-1. Say: _"Read .agent/HANDOFF.md and continue from where the last agent left off"_
-2. New agent picks up context without re-analyzing entire codebase
-
-### For Second Opinion
-
-1. Set Status to `review-needed`
-2. Fill "What Was Done" with the approach taken
-3. Add specific question to "Blockers & Open Questions"
-4. Tell second agent: _"Read .agent/HANDOFF.md — I need a second opinion on the approach described"_
+- Update this file when pausing a complex task or transferring context between agents.
+- Do not store secrets, tokens, credentials, private hostnames, customer data, or long logs here.
+- Keep entries specific enough for another agent to resume without re-discovering the full context.

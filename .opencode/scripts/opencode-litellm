@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SSH_TARGET="${LITELLM_ROUTER_SSH_TARGET:-root@100.101.254.17}"
+LOCAL_PORT="${LITELLM_ROUTER_LOCAL_PORT:-43112}"
+REMOTE_PORT="${LITELLM_ROUTER_REMOTE_PORT:-4010}"
+SECRET_FILE="${LITELLM_ROUTER_SECRET_FILE:-/home/matheus/.litellm_router_master_key}"
+
+if [ ! -r "$SECRET_FILE" ]; then
+  printf '[!] LiteLLM master key file not found: %s\n' "$SECRET_FILE" >&2
+  exit 1
+fi
+
+if ! python3 - "$LOCAL_PORT" <<'PY'
+import socket
+import sys
+
+port = int(sys.argv[1])
+sock = socket.socket()
+sock.settimeout(1)
+try:
+    sock.connect(("127.0.0.1", port))
+except OSError:
+    sys.exit(1)
+finally:
+    sock.close()
+PY
+then
+  ssh -f -N -o ExitOnForwardFailure=yes -L "127.0.0.1:${LOCAL_PORT}:127.0.0.1:${REMOTE_PORT}" "$SSH_TARGET"
+fi
+
+export LITELLM_MASTER_KEY
+LITELLM_MASTER_KEY="$(tr -d '\n' < "$SECRET_FILE")"
+
+exec opencode "$@"

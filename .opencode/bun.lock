@@ -1,0 +1,23 @@
+{
+  "lockfileVersion": 1,
+  "configVersion": 1,
+  "workspaces": {
+    "": {
+      "dependencies": {
+        "@kilocode/plugin": "7.0.47",
+        "@opencode-ai/plugin": "1.2.27",
+      },
+    },
+  },
+  "packages": {
+    "@kilocode/plugin": ["@kilocode/plugin@7.0.47", "", { "dependencies": { "@kilocode/sdk": "7.0.47", "zod": "4.1.8" } }, "sha512-yv6pcQ6VnCgia/0erzJbMk6tHAK3HOuJRsFtdnKD6tXJKeINiicfJzqP+wWbB4F+u/07qR+QfqadPYIl6oS6Sg=="],
+
+    "@kilocode/sdk": ["@kilocode/sdk@7.0.47", "", {}, "sha512-Zuj/rmiIkhyb7tR2U5DOCILozuc6xIu53iFpuz/Du+a+6DxrJBB2/DR8Yt0osDavJwdHGTsmELI22kUuPQYAuw=="],
+
+    "@opencode-ai/plugin": ["@opencode-ai/plugin@1.2.27", "", { "dependencies": { "@opencode-ai/sdk": "1.2.27", "zod": "4.1.8" } }, "sha512-h+8Bw9v9nghMg7T+SUCTzxlIhOrsTqXW7U0HVLGQST5DjbN7uyCUM51roZWZ8LRjGxzbzFhvPnY1bj8i+ioZyw=="],
+
+    "@opencode-ai/sdk": ["@opencode-ai/sdk@1.2.27", "", {}, "sha512-Wk0o/I+Fo+wE3zgvlJDs8Fb67KlKqX0PrV8dK5adSDkANq6r4Z25zXJg2iOir+a8ntg3rAcpel1OY4FV/TwRUA=="],
+
+    "zod": ["zod@4.1.8", "", {}, "sha512-5R1P+WwQqmmMIEACyzSvo4JXHY5WiAFHRMg+zBZKgKS+Q1viRa0C1hmUKtHltoIFKtIdki3pRxkmpP74jnNYHQ=="],
+  }
+}

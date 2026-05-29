@@ -222,7 +222,7 @@ or
 
 ### Q: Do I need to memorize agent names?
 
-**A:** No! That's exactly the advantage. You write in natural language and the system chooses automatically. If you want to know which agents exist, check `ARCHITECTURE.md`.
+**A:** No! That's exactly the advantage. You write in natural language and the system chooses automatically. If you want to know which agents exist, check `/home/matheus/Documentos/vscode/baseDev/.agent/ARCHITECTURE.md`.
 
 ## 🔍 Debug Mode
 
@@ -250,7 +250,7 @@ Show selection reasoning:
 
 - **Full Skill**: `.agent/skills/intelligent-routing/SKILL.md`
 - **Configuration**: `.agent/rules/GEMINI.md` (TIER 0 section)
-- **Available Agents**: `.agent/ARCHITECTURE.md`
+- **Available Agents**: `/home/matheus/Documentos/vscode/baseDev/.agent/ARCHITECTURE.md`
 
 ---
 

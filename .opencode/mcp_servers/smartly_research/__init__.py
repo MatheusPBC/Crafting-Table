@@ -1,0 +1,1 @@
+"""Smartly Research MCP package."""

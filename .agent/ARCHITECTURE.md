@@ -28,6 +28,17 @@ Antigravity Kit is a modular system consisting of:
 
 ---
 
+## 📚 External Rule Contracts
+
+These files are outside `.agent/`, but must be considered during implementation:
+
+- `.kilocode/rules/GEMINI.md` (highest-priority runtime rule set)
+- `.kilocode/rules/Python_Software_Design_Contract.md` (personal Python architecture and design contract)
+
+Use this architecture map together with those contracts; do not duplicate rule content in multiple places.
+
+---
+
 ## 🤖 Agents (19)
 
 Specialist AI personas for different domains.
@@ -125,6 +136,7 @@ Modular knowledge domains that agents can load on-demand. based on task context.
 | `architecture` | System design patterns |
 | `plan-writing` | Task planning, breakdown |
 | `brainstorming` | Socratic questioning |
+
 
 ### Education & Mentoring
 

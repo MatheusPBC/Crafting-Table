@@ -1,1 +1,61 @@
-{"mcpServers":{"context7":{"command":"npx","args":["-y","@upstash/context7-mcp"],"env":{"DEFAULT_MINIMUM_TOKENS":""},"disabled":true,"alwaysAllow":[]}}}
+{
+  "mcpServers": {
+    "github": {
+      "command": "bash",
+      "args": [
+        "-lc",
+        "GITHUB_PERSONAL_ACCESS_TOKEN=\"$(gh auth token)\" exec docker run -i --rm -e GITHUB_PERSONAL_ACCESS_TOKEN ghcr.io/github/github-mcp-server"
+      ],
+      "enabled": true
+    },
+    "docker-local": {
+      "command": "env",
+      "args": [
+        "-u",
+        "PYTHONHOME",
+        "-u",
+        "PYTHONPATH",
+        "-u",
+        "LD_LIBRARY_PATH",
+        "uv",
+        "run",
+        ".mcp_servers/docker_mcp_server.py"
+      ],
+      "enabled": true
+    },
+    "mysql-local": {
+      "command": "uv",
+      "args": ["run", ".mcp_servers/mysql_mcp_server.py"],
+      "env": {
+        "MYSQL_HOST": "${MYSQL_HOST}",
+        "MYSQL_PORT": "${MYSQL_PORT}",
+        "MYSQL_USER": "${MYSQL_USER}",
+        "MYSQL_PASSWORD": "${MYSQL_PASSWORD}",
+        "MYSQL_DATABASE": "${MYSQL_DATABASE}"
+      },
+      "enabled": false
+    },
+    "qdrant-local": {
+      "command": "uv",
+      "args": ["run", ".mcp_servers/qdrant_mcp_server.py"],
+      "env": {
+        "QDRANT_BASE_URL": "${QDRANT_BASE_URL}",
+        "QDRANT_TIMEOUT_SECONDS": "${QDRANT_TIMEOUT_SECONDS}",
+        "QDRANT_MAX_LIMIT": "${QDRANT_MAX_LIMIT}"
+      },
+      "enabled": false
+    },
+    "agentmemory": {
+      "command": "bash",
+      "args": [".mcp_servers/agentmemory_vps_mcp.sh"],
+      "env": {
+        "AGENTMEMORY_VPS_SSH_TARGET": "${AGENTMEMORY_VPS_SSH_TARGET}",
+        "AGENTMEMORY_LOCAL_PORT": "${AGENTMEMORY_LOCAL_PORT}",
+        "AGENTMEMORY_REMOTE_PORT": "${AGENTMEMORY_REMOTE_PORT}",
+        "AGENTMEMORY_SECRET_FILE": "${AGENTMEMORY_SECRET_FILE}",
+        "AGENTMEMORY_TOOLS": "${AGENTMEMORY_TOOLS}"
+      },
+      "enabled": false
+    }
+  }
+}

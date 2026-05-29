@@ -1,0 +1,106 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "small_model": "openai/gpt-5.3-codex-spark",
+  "default_agent": "general",
+  "instructions": [
+    ".kilocode/rules/*.md",
+    ".agent/rules/*.md",
+    ".agent/skills/*/SKILL.md",
+    "AGENTS.md"
+  ],
+  "plugin": [
+    "superpowers@git+https://github.com/obra/superpowers.git"
+  ],
+  "agent": {
+    "general": {
+      "model": "openai/gpt-5.5"
+    },
+    "plan": {
+      "model": "openai/gpt-5.5"
+    },
+    "explore": {
+      "model": "openai/gpt-5.3-codex-spark"
+    }
+  },
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "enabled": true,
+      "headers": {
+        "CONTEXT7_API_KEY": "{env:CONTEXT7_API_KEY}"
+      }
+    },
+    "github": {
+      "type": "local",
+      "command": [
+        "bash",
+        "-lc",
+        "GITHUB_PERSONAL_ACCESS_TOKEN=\"$(gh auth token)\" exec docker run -i --rm -e GITHUB_PERSONAL_ACCESS_TOKEN ghcr.io/github/github-mcp-server"
+      ],
+      "enabled": true,
+      "timeout": 120000
+    },
+    "docker-local": {
+      "type": "local",
+      "command": [
+        "env",
+        "-u",
+        "PYTHONHOME",
+        "-u",
+        "PYTHONPATH",
+        "-u",
+        "LD_LIBRARY_PATH",
+        "uv",
+        "run",
+        ".opencode/mcp_servers/docker_mcp_server.py"
+      ],
+      "enabled": true
+    },
+    "mysql-local": {
+      "type": "local",
+      "command": ["uv", "run", ".opencode/mcp_servers/mysql_mcp_server.py"],
+      "enabled": false,
+      "env": {
+        "MYSQL_HOST": "{env:MYSQL_HOST}",
+        "MYSQL_PORT": "{env:MYSQL_PORT}",
+        "MYSQL_USER": "{env:MYSQL_USER}",
+        "MYSQL_PASSWORD": "{env:MYSQL_PASSWORD}",
+        "MYSQL_DATABASE": "{env:MYSQL_DATABASE}"
+      }
+    },
+    "qdrant-local": {
+      "type": "local",
+      "command": ["uv", "run", ".opencode/mcp_servers/qdrant_mcp_server.py"],
+      "enabled": false,
+      "env": {
+        "QDRANT_BASE_URL": "{env:QDRANT_BASE_URL}",
+        "QDRANT_TIMEOUT_SECONDS": "{env:QDRANT_TIMEOUT_SECONDS}",
+        "QDRANT_MAX_LIMIT": "{env:QDRANT_MAX_LIMIT}"
+      }
+    },
+    "agentmemory": {
+      "type": "local",
+      "command": [
+        "env",
+        "-u",
+        "PYTHONHOME",
+        "-u",
+        "PYTHONPATH",
+        "-u",
+        "LD_LIBRARY_PATH",
+        "bash",
+        ".opencode/mcp_servers/agentmemory_vps_mcp.sh"
+      ],
+      "enabled": false,
+      "timeout": 180000,
+      "env": {
+        "AGENTMEMORY_VPS_SSH_TARGET": "{env:AGENTMEMORY_VPS_SSH_TARGET}",
+        "AGENTMEMORY_LOCAL_PORT": "{env:AGENTMEMORY_LOCAL_PORT}",
+        "AGENTMEMORY_REMOTE_PORT": "{env:AGENTMEMORY_REMOTE_PORT}",
+        "AGENTMEMORY_SECRET_FILE": "{env:AGENTMEMORY_SECRET_FILE}",
+        "AGENTMEMORY_TOOLS": "{env:AGENTMEMORY_TOOLS}"
+      }
+    }
+  }
+}

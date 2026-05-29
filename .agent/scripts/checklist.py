@@ -26,40 +26,33 @@ import argparse
 from pathlib import Path
 from typing import Dict, List, Optional
 
-
 # ANSI colors for terminal output
 class Colors:
-    HEADER = "\033[95m"
-    BLUE = "\033[94m"
-    CYAN = "\033[96m"
-    GREEN = "\033[92m"
-    YELLOW = "\033[93m"
-    RED = "\033[91m"
-    ENDC = "\033[0m"
-    BOLD = "\033[1m"
-
+    HEADER = '\033[95m'
+    BLUE = '\033[94m'
+    CYAN = '\033[96m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    RED = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
 
 def print_header(text: str):
-    print(f"\n{Colors.BOLD}{Colors.CYAN}{'=' * 60}{Colors.ENDC}")
+    print(f"\n{Colors.BOLD}{Colors.CYAN}{'='*60}{Colors.ENDC}")
     print(f"{Colors.BOLD}{Colors.CYAN}{text.center(60)}{Colors.ENDC}")
-    print(f"{Colors.BOLD}{Colors.CYAN}{'=' * 60}{Colors.ENDC}\n")
-
+    print(f"{Colors.BOLD}{Colors.CYAN}{'='*60}{Colors.ENDC}\n")
 
 def print_step(text: str):
     print(f"{Colors.BOLD}{Colors.BLUE}🔄 {text}{Colors.ENDC}")
 
-
 def print_success(text: str):
     print(f"{Colors.GREEN}✅ {text}{Colors.ENDC}")
-
 
 def print_warning(text: str):
     print(f"{Colors.YELLOW}⚠️  {text}{Colors.ENDC}")
 
-
 def print_error(text: str):
     print(f"{Colors.RED}❌ {text}{Colors.ENDC}")
-
 
 # Define priority-ordered checks
 CORE_CHECKS = [
@@ -67,18 +60,9 @@ CORE_CHECKS = [
     ("MySQL MCP Hardening Gate", ".agent/scripts/check_mysql_mcp_hardening.py", True),
     ("AWS MCP Hardening Gate", ".agent/scripts/check_aws_mcp_hardening.py", True),
     ("Docker MCP Hardening Gate", ".agent/scripts/check_docker_mcp_hardening.py", True),
-    ("Portable Stack Gate", ".agent/scripts/check_portable_stack.py", True),
-    (
-        "Security Scan",
-        ".agent/skills/vulnerability-scanner/scripts/security_scan.py",
-        True,
-    ),
+    ("Security Scan", ".agent/skills/vulnerability-scanner/scripts/security_scan.py", True),
     ("Lint Check", ".agent/skills/lint-and-validate/scripts/lint_runner.py", True),
-    (
-        "Schema Validation",
-        ".agent/skills/database-design/scripts/schema_validator.py",
-        False,
-    ),
+    ("Schema Validation", ".agent/skills/database-design/scripts/schema_validator.py", False),
     ("Test Runner", ".agent/skills/testing-patterns/scripts/test_runner.py", False),
     ("UX Audit", ".agent/skills/frontend-design/scripts/ux_audit.py", False),
     ("SEO Check", ".agent/skills/seo-fundamentals/scripts/seo_checker.py", False),
@@ -91,7 +75,6 @@ PLATFORM_GATE_SCRIPT_NAMES = {
     "check_mysql_mcp_hardening.py",
     "check_aws_mcp_hardening.py",
     "check_docker_mcp_hardening.py",
-    "check_portable_stack.py",
 }
 
 PLATFORM_ONLY_CHECKS = [
@@ -99,16 +82,8 @@ PLATFORM_ONLY_CHECKS = [
 ]
 
 PERFORMANCE_CHECKS = [
-    (
-        "Lighthouse Audit",
-        ".agent/skills/performance-profiling/scripts/lighthouse_audit.py",
-        True,
-    ),
-    (
-        "Playwright E2E",
-        ".agent/skills/webapp-testing/scripts/playwright_runner.py",
-        False,
-    ),
+    ("Lighthouse Audit", ".agent/skills/performance-profiling/scripts/lighthouse_audit.py", True),
+    ("Playwright E2E", ".agent/skills/webapp-testing/scripts/playwright_runner.py", False),
 ]
 
 
@@ -144,27 +119,23 @@ def parse_anti_drift_summary(output: str) -> Optional[Dict[str, object]]:
 
     return parsed
 
-
 def check_script_exists(script_path: Path) -> bool:
     """Check if script file exists"""
     return script_path.exists() and script_path.is_file()
 
-
-def run_script(
-    name: str, script_path: Path, project_path: str, url: Optional[str] = None
-) -> dict:
+def run_script(name: str, script_path: Path, project_path: str, url: Optional[str] = None) -> dict:
     """
     Run a validation script and capture results
-
+    
     Returns:
         dict with keys: name, passed, output, skipped
     """
     if not check_script_exists(script_path):
         print_warning(f"{name}: Script not found, skipping")
         return {"name": name, "passed": True, "output": "", "skipped": True}
-
+    
     print_step(f"Running: {name}")
-
+    
     # Build command
     cmd = ["python", str(script_path)]
     if script_path.name in PLATFORM_GATE_SCRIPT_NAMES:
@@ -172,19 +143,16 @@ def run_script(
     else:
         cmd.append(project_path)
 
-    if url and (
-        "lighthouse" in script_path.name.lower()
-        or "playwright" in script_path.name.lower()
-    ):
+    if url and ("lighthouse" in script_path.name.lower() or "playwright" in script_path.name.lower()):
         cmd.append(url)
-
+    
     # Run script
     try:
         result = subprocess.run(
             cmd,
             capture_output=True,
             text=True,
-            timeout=300,  # 5 minute timeout
+            timeout=300  # 5 minute timeout
         )
 
         passed = result.returncode == 0
@@ -203,68 +171,47 @@ def run_script(
                     f"optional_findings_total={optional_total} "
                     f"RESULT={drift_result}"
                 )
-                if (
-                    passed
-                    and isinstance(critical, int)
-                    and critical == 0
-                    and isinstance(optional_total, int)
-                    and optional_total > 0
-                ):
-                    print_warning(
-                        "Anti-Drift optional findings detected (non-blocking)."
-                    )
-
+                if passed and isinstance(critical, int) and critical == 0 and isinstance(optional_total, int) and optional_total > 0:
+                    print_warning("Anti-Drift optional findings detected (non-blocking).")
+        
         if passed:
             print_success(f"{name}: PASSED")
         else:
             print_error(f"{name}: FAILED")
             if result.stderr:
                 print(f"  Error: {result.stderr[:200]}")
-
+        
         return {
             "name": name,
             "passed": passed,
             "output": result.stdout,
             "error": result.stderr,
             "anti_drift_summary": anti_drift_summary,
-            "skipped": False,
+            "skipped": False
         }
-
+    
     except subprocess.TimeoutExpired:
         print_error(f"{name}: TIMEOUT (>5 minutes)")
-        return {
-            "name": name,
-            "passed": False,
-            "output": "",
-            "error": "Timeout",
-            "skipped": False,
-        }
-
+        return {"name": name, "passed": False, "output": "", "error": "Timeout", "skipped": False}
+    
     except Exception as e:
         print_error(f"{name}: ERROR - {str(e)}")
-        return {
-            "name": name,
-            "passed": False,
-            "output": "",
-            "error": str(e),
-            "skipped": False,
-        }
-
+        return {"name": name, "passed": False, "output": "", "error": str(e), "skipped": False}
 
 def print_summary(results: List[dict]):
     """Print final summary report"""
     print_header("📊 CHECKLIST SUMMARY")
-
+    
     passed_count = sum(1 for r in results if r["passed"] and not r.get("skipped"))
     failed_count = sum(1 for r in results if not r["passed"] and not r.get("skipped"))
     skipped_count = sum(1 for r in results if r.get("skipped"))
-
+    
     print(f"Total Checks: {len(results)}")
     print(f"{Colors.GREEN}✅ Passed: {passed_count}{Colors.ENDC}")
     print(f"{Colors.RED}❌ Failed: {failed_count}{Colors.ENDC}")
     print(f"{Colors.YELLOW}⏭️  Skipped: {skipped_count}{Colors.ENDC}")
     print()
-
+    
     # Detailed results
     for r in results:
         if r.get("skipped"):
@@ -273,7 +220,7 @@ def print_summary(results: List[dict]):
             status = f"{Colors.GREEN}✅{Colors.ENDC}"
         else:
             status = f"{Colors.RED}❌{Colors.ENDC}"
-
+        
         print(f"{status} {r['name']}")
         anti_drift = r.get("anti_drift_summary")
         if anti_drift:
@@ -283,16 +230,15 @@ def print_summary(results: List[dict]):
                 f"optional_findings_total={anti_drift.get('optional_findings_total')} "
                 f"RESULT={anti_drift.get('RESULT')}"
             )
-
+    
     print()
-
+    
     if failed_count > 0:
         print_error(f"{failed_count} check(s) FAILED - Please fix before proceeding")
         return False
     else:
         print_success("All checks PASSED ✨")
         return True
-
 
 def main():
     parser = argparse.ArgumentParser(
@@ -303,47 +249,33 @@ Examples:
   python scripts/checklist.py .                      # Core checks only
   python scripts/checklist.py . --url http://localhost:3000  # Include performance
   python scripts/checklist.py . --platform-only      # Platform gates only
-        """,
+        """
     )
     parser.add_argument("project", help="Project path to validate")
-    parser.add_argument(
-        "--url", help="URL for performance checks (lighthouse, playwright)"
-    )
-    parser.add_argument(
-        "--skip-performance",
-        action="store_true",
-        help="Skip performance checks even if URL provided",
-    )
-    parser.add_argument(
-        "--platform-only", action="store_true", help="Run only platform gates"
-    )
-
+    parser.add_argument("--url", help="URL for performance checks (lighthouse, playwright)")
+    parser.add_argument("--skip-performance", action="store_true", help="Skip performance checks even if URL provided")
+    parser.add_argument("--platform-only", action="store_true", help="Run only platform gates")
+    
     args = parser.parse_args()
-
+    
     project_path = Path(args.project).resolve()
-
+    
     if not project_path.exists():
         print_error(f"Project path does not exist: {project_path}")
         sys.exit(1)
-
+    
     print_header("🚀 ANTIGRAVITY KIT - MASTER CHECKLIST")
     print(f"Project: {project_path}")
     print(f"Mode: {'platform-only' if args.platform_only else 'default'}")
-    print(
-        f"URL: {args.url if args.url else 'Not provided (performance checks skipped)'}"
-    )
+    print(f"URL: {args.url if args.url else 'Not provided (performance checks skipped)'}")
 
     if args.platform_only and args.url:
-        print_warning(
-            "--url provided with --platform-only; performance checks will be ignored"
-        )
-
+        print_warning("--url provided with --platform-only; performance checks will be ignored")
+    
     results = []
-
+    
     checks_to_run = PLATFORM_ONLY_CHECKS if args.platform_only else CORE_CHECKS
-    checks_header = (
-        "🧱 PLATFORM-ONLY CHECKS" if args.platform_only else "📋 CORE CHECKS"
-    )
+    checks_header = "🧱 PLATFORM-ONLY CHECKS" if args.platform_only else "📋 CORE CHECKS"
 
     # Run selected checks
     print_header(checks_header)
@@ -351,13 +283,13 @@ Examples:
         script = project_path / script_path
         result = run_script(name, script, str(project_path))
         results.append(result)
-
+        
         # If required check fails, stop
         if required and not result["passed"] and not result.get("skipped"):
             print_error(f"CRITICAL: {name} failed. Stopping checklist.")
             print_summary(results)
             sys.exit(1)
-
+    
     # Run performance checks if URL provided (default mode only)
     if not args.platform_only and args.url and not args.skip_performance:
         print_header("⚡ PERFORMANCE CHECKS")
@@ -365,12 +297,11 @@ Examples:
             script = project_path / script_path
             result = run_script(name, script, str(project_path), args.url)
             results.append(result)
-
+    
     # Print summary
     all_passed = print_summary(results)
-
+    
     sys.exit(0 if all_passed else 1)
-
 
 if __name__ == "__main__":
     main()

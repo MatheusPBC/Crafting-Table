@@ -1,0 +1,16 @@
+node_modules/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.env
+.env.*
+!.env.example
+*.pyc
+*.pyo
+*.log
+*.zip
+platform/exports/*
+platform/snapshots/*
+!platform/exports/.gitkeep
+!platform/snapshots/.gitkeep

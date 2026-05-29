@@ -1,6 +1,6 @@
 {
   "manifestVersion": "1.0.0",
-  "stackVersion": "1.0.0",
+  "stackVersion": "1.1.0",
   "stackName": "portable-cli-stack",
   "description": "Portable CLI environment stack for private repository usage.",
   "precedencePolicy": [
@@ -9,11 +9,23 @@
     "local"
   ],
   "credentialsPolicy": {
-    "repositoryVisibility": "private",
-    "versionedCredentials": true,
-    "exportIncludesCredentialsByDefault": true
+    "repositoryVisibility": "private-or-public",
+    "versionedCredentials": false,
+    "exportIncludesCredentialsByDefault": false
   },
   "components": [
+    {
+      "name": "opencode_project_config",
+      "source": "opencode.json",
+      "target": "opencode.json",
+      "required": true
+    },
+    {
+      "name": "opencode_harness",
+      "source": ".opencode",
+      "target": ".opencode",
+      "required": true
+    },
     {
       "name": "agent_config",
       "source": ".agent",

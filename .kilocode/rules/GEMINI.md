@@ -92,6 +92,14 @@ When user's prompt is NOT in English:
 - **Performance**: Measure first. Adhere to 2025 standards (Core Web Vitals).
 - **Infra/Safety**: 5-Phase Deployment. Verify secrets security.
 
+### 🧾 Personal Engineering Contracts
+
+When a request involves Python design, architecture, refactoring, or interface contracts, you MUST read and apply:
+
+- `.kilocode/rules/Python_Software_Design_Contract.md`
+
+Apply this contract together with `@[skills/clean-code]` and respect global rule priority (GEMINI > agent > skill > local contracts).
+
 ### 📁 File Dependency Awareness
 
 **Before modifying ANY file:**
@@ -102,7 +110,7 @@ When user's prompt is NOT in English:
 
 ### 🗺️ System Map Read
 
-> 🔴 **MANDATORY:** Read `ARCHITECTURE.md` at session start to understand Agents, Skills, and Scripts.
+> 🔴 **MANDATORY:** Read `/home/matheus/Documentos/vscode/baseDev/.agent/ARCHITECTURE.md` at session start to understand Agents, Skills, and Scripts.
 
 **Path Awareness:**
 
@@ -122,6 +130,31 @@ When user's prompt is NOT in English:
 1. What is the GOAL of this agent/skill?
 2. What PRINCIPLES must I apply?
 3. How does this DIFFER from generic output?
+
+### 🔎 Code Research Priority
+
+When the request involves **codebase research, flow tracing, impact analysis, related tests, or implementation discovery**, prefer the local `smartly-research` MCP tools first.
+
+Priority order:
+1. `smartly-research_*` for hybrid RLM + semantic retrieval + evidence
+2. `smartly-vps-cocoindex` for fallback or narrow semantic discovery using the Tailscale VPS index at `100.101.254.17`
+3. local `read`/`grep` for confirmation and exact evidence
+
+Do not jump directly to `grep`/`read` for broad research if `smartly-research` fits the task.
+
+### 🧠 AgentMemory Usage
+
+Use the `agentmemory` MCP as auxiliary long-term memory across sessions.
+
+Use it for:
+- recalling prior decisions, preferences, setup context, and file history
+- saving stable technical decisions, user preferences, reusable project patterns, and hard-to-reconstruct operational context
+
+Do not use it for:
+- secrets, tokens, passwords, credentials, sensitive data, large logs, or temporary trial-and-error details
+- replacing git history, versioned docs, tests, or explicit handoff notes
+
+When memory informs a response, mention `agentmemory` briefly. For critical code claims, confirm with local evidence (`read`, `git diff`, `smartly-research`, or `smartly-vps-cocoindex`).
 
 ---
 
